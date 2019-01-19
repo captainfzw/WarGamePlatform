@@ -1,0 +1,1 @@
+STATES = {'fatigue' : 1 ,}
