@@ -14,12 +14,12 @@ class Chess_Board(object):
 		landform_board[row][col]   %棋盘_row_col:地形
 		chess[row][col][chess_num] %棋盘_row_col_棋子id 
 	"""
-	def __init__(self, village, chess, gradiant_board , landform_board, row = 29, col = 33 ):
+	def __init__(self, village, chess_list, gradiant_board , landform_board, row = 29, col = 33 ):
 		self.__row = row
 		self.__col = col
 		# self.__chess = [[[] for y in range(col)] for x in range(row)]  	 #list 生成棋子初始为空		
 		self.__village = village
-		self.chess = chess 
+		self.chess_list = chess_list 
 		self.__gradiant_board = gradiant_board	  #初始化坡度为开阔地
 		self.__landform_board = landform_board     #初始化地形为开阔地
 		# print("pls: input the villages' row and col separate as: Init_Village(village_count,([x1,y1]...[xn,yn])) ")
@@ -94,7 +94,14 @@ class Chess_Board(object):
 	#村庄占领状态改变 
 	def Change_State_of_Village(self, Id, new_state):
 		self.village[Id][2] = new_state
-
+	
+	def chess_is_in(self,chess_id):
+		if chess_id in self.chess_list:
+			return True
+		else:
+			return False
+	
+	
 	def Debug(self):
 		print(self.__chess)
 		print(self.__gradiant_board)
