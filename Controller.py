@@ -14,26 +14,28 @@ class Controller():
         moving_list: 移动的棋子ID
         fire_list: 射击的棋子ID
         action_list: 行动的棋子ID（包含上述行动）
+        plyaer_list: player_ID的列表
     ''' 
-    def __init__(self):
+    def __init__(self, plyaer_list):
         self.moving_list = []
         self.fire_list = []
         self.action_list = []
+        
 
     
     def reset_list():
         self.moving_list = []
         self.fire_list = []
         self.action_list = []
+
     
-   
-    def load_ai(self):
-         '''
-        装载AI程序，把AI的ID分配给对方
+    
+    def end_round(self，game, player_id):
+        '''
+        结束回合，根据player的ID进行结算
         '''
         pass
 
-    
     def update_supress(self, game, player_id):
         '''
         在回合开始时更新压制状态
