@@ -4,24 +4,24 @@ class Chess_Board(object):
 	Args:
 		row % 行数，默认29
 		col % 列数，默认33
-		
-		village_count 				%村庄数量
-		village[id][2]     %村庄_id位置:Village[id][0]->行；Village[id][1]->列
-		village_state[id] 	%村状态： Village_State[] = False -> 未占领 ； Village_State[] = x ——>被x那方 占领
-		
-		village  			%村庄信息三元组（（x1,y1,state) ...(xn,yn,state)）
+
+		village[id][3]     %村庄_id位置:Village[id][0]->行；Village[id][1]->列; Village[id][2] -> 村庄状态
+		village_score[id]        % 村庄的分数
+
  		gradiant_board[row][col]   %棋盘_row_col:坡度 
 		landform_board[row][col]   %棋盘_row_col:地形
-		chess[row][col][chess_num] %棋盘_row_col_棋子id 
+		chess[row][col][chess_num] %棋盘_row_col_棋子id
 	"""
-	def __init__(self, village, chess_list, gradiant_board , landform_board, row = 29, col = 33 ):
+	def __init__(self, village ,village_score, chess_list, gradiant_board , landform_board, row = 29, col = 33 ):
 		self.__row = row
 		self.__col = col
 		# self.__chess = [[[] for y in range(col)] for x in range(row)]  	 #list 生成棋子初始为空		
+		#初始化村庄位置、分值
 		self.__village = village
 		self.chess_list = chess_list 
 		self.__gradiant_board = gradiant_board	  #初始化坡度为开阔地
 		self.__landform_board = landform_board     #初始化地形为开阔地
+		self.__village_score = village_score
 		# print("pls: input the villages' row and col separate as: Init_Village(village_count,([x1,y1]...[xn,yn])) ")
 	
 	#初始化村庄
@@ -85,7 +85,7 @@ class Chess_Board(object):
 
 	def Get_Gradiant(self):
 		return self.__gradiant_board
-	
+
 	#移动棋子
 	def Move_Chess(self,from_chess,to_chess):
 		self.Add_One_Chess(to_chess)
@@ -94,13 +94,22 @@ class Chess_Board(object):
 	#村庄占领状态改变 
 	def Change_State_of_Village(self, Id, new_state):
 		self.village[Id][2] = new_state
-	
+
+    def Get_Village_State(self, Id):
+        return self.village[Id][2]
+
+    def Get_Village_Score(self, Id):
+        return self.village[Id]
+
+    def Get_Village_Count(self):
+        return len(self.village)
+
 	def chess_is_in(self,chess_id):
 		if chess_id in self.chess_list:
 			return True
 		else:
 			return False
-	
+
 	
 	def Debug(self):
 		print(self.__chess)
@@ -110,4 +119,3 @@ class Chess_Board(object):
 		print()
 
 
-	

@@ -9,13 +9,13 @@ def if __name__ == "__main__":
     '''
     初始化棋盘，棋子，玩家
     '''
-    chessboard = Chessboard()
+    chessboard = Chess_Board(village, chess_list, gradiant_board , landform_board, row = 29, col = 33)
     chess_list_id = []
     chess_list_objcet = {}
     player_list_id = []
     player_list_object = {}
 
-    Game = game(chessboard,chess_list_id, chess_list_objcet, player_list_id, player_list_object)
+    game = Game(chessboard,chess_list_id, chess_list_objcet, player_list_id, player_list_object)
 
     Controller con = Controller()
     Communicator comm = Communicator()
@@ -36,8 +36,6 @@ def if __name__ == "__main__":
         if infoclass == 'Action':
             chess_id = ['ChessID']
             action = message['action']
-            if action == 'move':
-                pass
 
             if action == 'move':
                 pass
@@ -62,7 +60,20 @@ def if __name__ == "__main__":
         
         if game.end():
             break
-        
+    #结算本场每个player_id得分，和胜负
+    player_score= {}
+    #1.结算占领要点分值
+    for Id in range(chessboard.Get_Village_Count()):
+        player_score[Id] = chessboard.Get_Village_Score(Id) + player_score[Id]
+    #2.结算兵力分值
+    for player_id in player_list_id:
+        for chess_id in chess_list_id:
+            chess = game.get_chess(chess_id)
+            stone = chess.get_stone()
+            if chess.is_alive():
+                player_score[player_id] = player_score[player_id] + stone.get_score()
+
+    player_result = sorted(player_score.items(), key=lambda kv: kv[1])
     '''
     展示游戏结果
     ‘’‘
