@@ -10,8 +10,9 @@ class BaseStone():
         weapons: 一个数组，表示携带棋子的武器
         states: 数字，表示棋子的状态
         suppress: bool，表示是否处于被压制状态
+        score: 表示棋子的分值
     """
-    def __init__(self,  mobility, weapons, states, stone_type, name, suppress):
+    def __init__(self,  mobility, weapons, states, stone_type, name, suppress, score):
         self.name = name
         self.stone_type = stone_type
         self.max_mobility = mobility
@@ -19,7 +20,7 @@ class BaseStone():
         self.weapons = weapons
         self.states = states
         self.suppress = suppress
-
+        self.score = score
     
     def set_states(self,states):
         self.states = states
@@ -50,8 +51,9 @@ class BaseStone():
 
     def get_current_mobility(self):
         return self.current_mobility
-    
-    
+
+    def get_score(self):
+        return self.score
 
 class SoliderStone(BaseStone):
     '''
@@ -180,8 +182,8 @@ class Borad_Chess(object):
     def get_stone(self):
         return self.stone
 
-        
 
-    
+
+
 
     
