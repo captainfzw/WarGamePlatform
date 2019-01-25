@@ -1,4 +1,4 @@
-
+import
 class Communicator():
     '''
 
