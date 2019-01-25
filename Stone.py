@@ -8,7 +8,7 @@ class BaseStone():
         max_mobility: 棋子的行动力上限
         current_mobility: 棋子的当前行动力
         weapons: 一个数组，表示携带棋子的武器
-        states: 数字，表示棋子的状态
+        states: 数字，表示棋子的状态  共两种，1-hide；2-die
         suppress: bool，表示是否处于被压制状态
         score: 表示棋子的分值
     """
@@ -21,7 +21,7 @@ class BaseStone():
         self.states = states
         self.suppress = suppress
         self.score = score
-    
+
     def set_states(self,states):
         self.states = states
 
@@ -62,6 +62,7 @@ class SoliderStone(BaseStone):
     Args:
         fatigue: 疲劳值
         fire_mark: 标记是否可以进行射击
+        move: 标记本轮是否移动 ->处于机动状态
     '''
     def __init__(self, chess_id, mobility, weapons, states, stone_type, name, fatigue=0):
         super(chess_id, mobility, weapons, states)
@@ -69,7 +70,8 @@ class SoliderStone(BaseStone):
         self.name = name
         self.fatigue = fatigue
         self.fire_mark = True
-    
+        self.move = False
+
     def get_fatigue(self):
         return self.fatigue
 
@@ -82,6 +84,11 @@ class SoliderStone(BaseStone):
     def set_fire_mark(self,fire_mark):
         self.fire_mark = fire_mark
 
+    def set_move(self,move):
+        self.move = move
+
+    def get_move(self):
+        return self.move
 
 class Chariot(BaseStone):
 
@@ -103,7 +110,9 @@ class Chariot(BaseStone):
         self.passengers_list = []
 
 
-    
+    def Get_Passengers(self):
+        return self.passengers_list
+
     def load_solider(self, solider_id):
         '''
         承载士兵的函数
