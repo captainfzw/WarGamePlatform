@@ -14,6 +14,7 @@ import time
 '''
 def tcplink(sock, addr, player_id, game):
     # 将plyaer_id 发给玩家
+    conn = Controller()
     data = json.dumps({'player_id' : player_id})
     sock.send(data.encode('utf-8'))
     my_turn = False
@@ -51,10 +52,10 @@ def tcplink(sock, addr, player_id, game):
                 x = mess['x']
                 y = mess['y']
                 pos = {'x':x, 'y':y}
-                flag = conn.move_chess(game, chess_id, player_id, pos):
+                flag = conn.move_chess(game, chess_id, player_id, pos)
 
             if action == 'hide':
-                flag = conn.hidden_action(game, player_id, chess_id ):
+                flag = conn.hidden_action(game, player_id, chess_id )
 
             if action == 'conquer':
                 village_id = mess['village_id']
@@ -78,7 +79,7 @@ def tcplink(sock, addr, player_id, game):
         data = json.dumps(replay)
         sock.send(data.encode('utf-8'))
     sock.close()
-    print 'Connection from %s:%s closed.' % addr
+    print ('Connection from %s:%s closed.' % addr)
 
 def if __name__ == "__main__":
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -86,6 +87,7 @@ def if __name__ == "__main__":
     '''
     初始化棋盘，棋子，玩家
     '''
+
     chessboard = Chess_Board(village, chess_list, gradiant_board , landform_board, row = 29, col = 33)
     chess_list_id = []
     chess_list_objcet = {}
@@ -94,7 +96,6 @@ def if __name__ == "__main__":
 
     game = Game(chessboard,chess_list_id, chess_list_objcet, player_list_id, player_list_object)
 
-    Controller con = Controller()
 
     cnt = 0
     # 监听端口:

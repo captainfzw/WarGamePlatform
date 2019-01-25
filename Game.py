@@ -114,3 +114,9 @@ class Game():
     
     def get_player_list_object(self):
         return self.player_list_object
+
+    def get_chess(self,chess_id):
+        if chess_id in self.get_chess_list_id:
+            return self.chess_list_object['chess_id']
+        else:
+            return None
