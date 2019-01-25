@@ -2,23 +2,32 @@ import Controller
 import Stone
 import Game
 import ChessBoard
+import Communicator
 import json
 
 
-def if __name__ == "__main__":
+if __name__ == "__main__":
     '''
     初始化棋盘，棋子，玩家
     '''
-    chessboard = Chess_Board(village, chess_list, gradiant_board , landform_board, row = 29, col = 33)
+    village  = []
+    village_score = []
+    chess_list = []
+    gradiant_board = []
+    landform_board = []
+    row = 2
+    col = 3
     chess_list_id = []
     chess_list_objcet = {}
     player_list_id = []
     player_list_object = {}
 
+    chessboard = ChessBoard(village ,village_score, chess_list, gradiant_board , landform_board, row , col )
+
     game = Game(chessboard,chess_list_id, chess_list_objcet, player_list_id, player_list_object)
 
-    Controller con = Controller()
-    Communicator comm = Communicator()
+    controller = Controller()
+    comm = Communicator()
     message = json.load('')
     
     '''
@@ -36,21 +45,24 @@ def if __name__ == "__main__":
         if infoclass == 'Action':
             chess_id = ['ChessID']
             action = message['action']
-
+            #pos??
             if action == 'move':
-                pass
+                controller.move_chess(game,chess_id,player_id,pos)
             
             if action == 'hide':
-                pass
+                controller.hidden_action(game,player_id,chess_id)
             
             if action == 'conquer':
-                pass
+                controller.conquer_village(game,player_id,chess_id,village_id)
 
-            if action == 'car':
-                pass
+            if action == 'on_car':
+                controller.get_on_car(game,player_id,solider_id,car_id)
+
+            if action == 'off_car':
+                controller.get_off_car(game,player_id,solider_id,car_id)
 
             if action == 'fire':
-                pass
+                fire_action(game,player_id,chess_id,arm_id,action_type)
         
         if infoclass == 'System':
             pass
@@ -60,6 +72,7 @@ def if __name__ == "__main__":
         
         if game.end():
             break
+
     #结算本场每个player_id得分，和胜负
     player_score= {}
     #1.结算占领要点分值

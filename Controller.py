@@ -25,7 +25,7 @@ class Controller():
         
 
     
-    def reset_list():
+    def reset_lis(self):
         self.moving_list = []
         self.fire_list = []
         self.action_list = []
@@ -40,23 +40,11 @@ class Controller():
         将player_id对应的所有有行动的棋子进行回合结算
         # !! 增加有action 的棋子的 action_type 
         '''
+
         player = game.get_player(player_id)
         for chess_id in self.action_list:
             if not player.chess_is_belonged_to(chess_id) :
                 pass
-            else:
-                if chess_action_type == 'move':
-                    self.move_chess(game,chess_id,player_id,pos)
-                elif chess_ation_type == 'hidden':
-                    self.hidden_action()
-                elif chess_action_type == 'conquer':
-                    self.conquer_village(self,game, player_id,chess_id, village_id)
-                elif chess_aciton_type == 'take_on_car':
-                    self.get_on_car(game, player_id, solider_id, car_id)
-                elif chess_action_type == 'take_off_car':
-                    self.get_off_car(game, player_id, solider_id, car_id)
-                elif chess_action_type == 'shot':
-                    self.fire_action(self, game, plyaer_id,chess_id, arm_id, %)
 
     def update_supress(self, game, player_id):
         '''
@@ -66,6 +54,7 @@ class Controller():
             player_id: 需要更新的玩家ID，因为更新操作是对玩家所有的棋子进行的
         '''
         # 对该player_id的玩家的所有棋子进行压制状态取反
+
         player = game.get_player(player_id)
         chess_list = player.get_chess_list()
         for chess_id in chess_list:

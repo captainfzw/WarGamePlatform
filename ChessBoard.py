@@ -8,15 +8,15 @@ class Chess_Board(object):
 		village[id][3]     %村庄_id位置:Village[id][0]->行；Village[id][1]->列; Village[id][2] -> 村庄状态
 		village_score[id]        % 村庄的分数
 
- 		gradiant_board[row][col]   %棋盘_row_col:坡度 
+		gradiant_board[row][col]   %棋盘_row_col:坡度
 		landform_board[row][col]   %棋盘_row_col:地形
 		chess[row][col][chess_num] %棋盘_row_col_棋子id
 	"""
 	def __init__(self, village ,village_score, chess_list, gradiant_board , landform_board, row = 29, col = 33 ):
 		self.__row = row
 		self.__col = col
-		# self.__chess = [[[] for y in range(col)] for x in range(row)]  	 #list 生成棋子初始为空		
-		#初始化村庄位置、分值
+		# self.chess = [[[] for y in range(col)] for x in range(row)]  	 #list 生成棋子初始为空
+		# 初始化村庄位置、分值
 		self.__village = village
 		self.chess_list = chess_list 
 		self.__gradiant_board = gradiant_board	  #初始化坡度为开阔地
@@ -37,10 +37,10 @@ class Chess_Board(object):
 	# 		self.__village.append((villages[i][0],villages[i][1],village_state[i])) # village_id: (x,y,state)
 	# 	print("pls: input the chess as : Init_Chess(chess_count,([x1,y1,id],[x2,y2,id],...,[xn,yn,id]))")
 
-	#初始化棋子
-	# def Init_Chess(self,chess_count,chess):
-	# 	for i in range(chess_count):
-	# 		self.__chess[chess[i][0]][chess[i][1]].append(chess[i][2])
+	#初始化棋子 parameters format: chess: (x,y,chess_id)
+	def Init_Chess(self,chess_count,chess):
+		for i in range(chess_count):
+			self.chess_list[chess[i][0]][chess[i][1]].append(chess[i][2])
 	# 	print("pls: input the road as : Init_Road(road_count,((x1,y1),(x2,y2),...,(xn,yn)))")
 
 	# #初始化普通道路
@@ -62,13 +62,30 @@ class Chess_Board(object):
 	# 			__gradiant_board[x][y] = gradiant[x*row + y] #坡度
 	# 	print("ALl Done. Let's begin!") 
 
+
+	def Judge_Chess(self,position):
+		position_x = position[0]
+		position_y = position[1]
+		if position_x >= 0 and position_x < self.__row and position_y >= 0 and position_y < self.__col:
+			return True
+		else:
+			return False
+
 	#删除棋子
 	def Remove_One_Chess(self,chess):
-		self.__chess[chess[0]][chess[1]].remove(chess[2])
+		position = []
+		position.append(chess[0])# (x
+		position.append(chess[1]) # y)
+		if self.Judge_Chess(position):
+			self.__chess[chess[0]][chess[1]].remove(chess[2])
 
 	#增加棋子
 	def Add_One_Chess(self,chess):
-		self.__chess[chess[0]][chess[1]].append(chess[2])
+		position = []
+		position.append(chess[0])# (x
+		position.append(chess[1]) # y)
+		if self.Judge_Chess(position):
+			self.__chess[chess[0]][chess[1]].append(chess[2])
 
 	#获取棋盘信息
 	def Get_All_Info(self):
@@ -86,23 +103,26 @@ class Chess_Board(object):
 	def Get_Gradiant(self):
 		return self.__gradiant_board
 
-	#移动棋子
+	#移动棋子: parameter_format:(x1,y1,chess_id) -> (x2,y2,chess_id)
+    #1.判断（x2,y2) 合法性；2.判断（x2,y2)是否在其周围6格之内
 	def Move_Chess(self,from_chess,to_chess):
+
 		self.Add_One_Chess(to_chess)
 		self.Remove_One_Chess(from_chess)
 
-	#村庄占领状态改变 
+
+	#村庄占领状态改变
 	def Change_State_of_Village(self, Id, new_state):
-		self.village[Id][2] = new_state
+		self.__village[Id][2] = new_state
 
-    def Get_Village_State(self, Id):
-        return self.village[Id][2]
+	def Get_Village_State(self, Id):
+		return self.__village[Id][2]
 
-    def Get_Village_Score(self, Id):
-        return self.village[Id]
+	def Get_Village_Score(self, Id):
+		return self.__village_score[Id]
 
-    def Get_Village_Count(self):
-        return len(self.village)
+	def Get_Village_Count(self):
+		return len(self.__village)
 
 	def chess_is_in(self,chess_id):
 		if chess_id in self.chess_list:
@@ -110,9 +130,8 @@ class Chess_Board(object):
 		else:
 			return False
 
-	
 	def Debug(self):
-		print(self.__chess)
+		print(self.chess)
 		print(self.__gradiant_board)
 		print(self.__landform_board)
 		pass
