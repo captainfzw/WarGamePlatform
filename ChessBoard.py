@@ -1,5 +1,3 @@
-import Game
-from collections import deque
 import collections
 
 class Chess_Board(object):
@@ -330,9 +328,10 @@ class Chess_Board(object):
 	#1. 将己方的所有棋子的十格范围内的对手的人员棋子放入list。
 	#2. 将己方的所有棋子的25格范围内的可以通视的对手的车辆棋子（车上的人）放入list。
 	#3. asumin that no chess obstructe sight
+	#4. 通视时考虑了对手是否隐蔽
 
-
-	def is_in_player_vision(self,game , player_id, arm_id):
+	#获取玩家当前时刻得到的非本方棋子
+	def get_player_vision(self,game , player_id):
 		player = game.get_player(player_id)
 		chess_list = player.get_chess_list()
 		vision_list = list()
@@ -352,6 +351,12 @@ class Chess_Board(object):
 								vision_list.append(chess_id_2)
 							elif stone.get_stone_type() == 'chariot' and distance <= 12 and stone.get_state() == 'hidden':
 								vision_list.append(chess_id_2)
+		player.set_army_chess_list(vision_list)
+		return vision_list
+
+	#判断当前玩家是否能够观察到对方某棋子
+	def is_in_player_vision(self,game , player_id, arm_id):
+		vision_list = self.get_player_vision(game,player_id)
 		if arm_id in vision_list:
 			return True
 		else :
