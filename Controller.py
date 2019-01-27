@@ -1,13 +1,12 @@
 import Stone
 import config
 import Game
+import random
 
 '''
 裁判模块，用来对游戏状态进行结算
 
 '''
-
-
 class Controller():
 
     '''
@@ -17,11 +16,21 @@ class Controller():
         fire_list: 射击的棋子ID
         action_list: 行动的棋子ID（包含上述行动）
         plyaer_list: player_ID的列表
+        attack_table:裁决表，一个map，不同的攻击等级对应不同的概率
     ''' 
     def __init__(self, plyaer_list):
         self.moving_list = []
         self.fire_list = []
         self.action_list = []
+        self.attak_table = {}
+        
+
+    
+    def reset_list():
+        self.moving_list = []
+        self.fire_list = []
+        self.action_list = []
+
     
     
     def end_round(self, game , player_id):
@@ -161,21 +170,39 @@ class Controller():
         self.action_list.append(chess_id)
         self.moving_list.append(chess_id)
 
-    def fire_action(self, game, plyaer_id,chess_id, arm_id, action_type):
+    def fire_action(self, game, plyaer_id,chess_id, arm_id, weapon_name):
         '''
         射击操作
 
         Args:
             action_type:表示射击的类别
         '''
-        if action_type == 'conver_fire':
+        player = game.get_player(player_id)
+        chess_board = game.get_chess_board()
+        chess = game.get_chess(chess_id)
+        stone = chess.get_stone()
+        arm_chess = game.get_chess(chess_id)
+        arm_stone = arm_chess.get_stone()
+        weapons = stone.get_weapons()
+        attack_level = weapons['name'].get_attack_level()
+        attack_distance = weapons['name'].get_attack_distance()
+        # 棋子是否在可视范围内
+        if chess_board.is_in_player_vision(plyaer_id, arm_id):
+            # 计算棋子间的距离
+            if chess_board.cal_distance(chess_id,army_id) <= attack_distance:
+                armor = arm_stone.get_armor()
+                hit_chance = self.attak_table[str(attack_level - armor)]
+                if random.random() < hit_chance:
+                    arm_stone.set_state('die')
+                    arm_chess.set_alive(False)
+                    return True
+        return False
 
-            pass
-        elif action_type == 'moving_fire':
-            pass
-        elif acton_type == 'opportunity_fire':
 
-            pass
+        
+
+
+    
 
     #若棋子被压制 ，False ，表示操作失败
     #若 1. 车辆棋子行动力不小于初始机动力的一半
@@ -324,8 +351,8 @@ class Controller():
         #2.检查周围6格是否有对方棋子
         if conquer_chess.get_x() == village_x and conquer_chess.get_y() == village_y:
             if village_x%2 == 0:
-                dir_x = [-1,-1,1,1,0,0]
-                dir_y = [0,1,0,1,-1,1]
+                dir_x = [-1 ,-1 ,1 ,1 ,0 ,0 ]
+				dir_y = [0 ,1 ,0 ,1 ,-1 ,1 ]
                 #周围6个格子上的所有棋子
                 for _x , _y in zip(dir_x,dir_y):
                     around_chess_x = _x + village_x
